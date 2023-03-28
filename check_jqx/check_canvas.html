@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="js/scripts/jquery.js"></script>
+    <script type="text/javascript" src="js/scripts/jcanvas.js"></script>
+    <script type="text/javascript" src="js/scripts/underscore.js"></script>
+    <script type="text/javascript" src="js/scripts/backbone.js"></script>
+</head>
+<body>
+<canvas hidden id="canvas"></canvas>
+
+    <script>
+        function jqx_text_width(text) {
+            const canvas = jqx_text_width.canvas || (jqx_text_width.canvas = document.getElementById("canvas"));
+            // const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+            let canvasText = ctx.measureText(text);
+            return canvasText.width
+        }
+
+        console.log(jqx_text_width("Ciao ciccio"));
+    </script>
+
+    <p id="result"></p>
+</body>
+</html>

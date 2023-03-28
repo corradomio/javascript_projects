@@ -1,0 +1,82 @@
+<html>
+<head>
+    <title>IPredict Train</title>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqwidgets/16.0.0/jqwidgets/jqx-all.js" ></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>-->
+    <!--<script type="text/javascript" src="js/require.js"></script>-->
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/underscore.js"></script>
+    <!--<script type="text/javascript" src="js/jqx-all.js"></script>-->
+    <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxpanel.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxtree.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxexpander.js"></script>
+    <script type="text/javascript" src="js/backbone.js"></script>
+    <script type="text/javascript" src="app/utils.js"></script>
+    <!--<link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />-->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            margin: 0;
+        }
+        #main {
+            display: flex;
+            flex: 1;
+        }
+        #main > article {
+            flex: 1;
+        }
+
+        #main > nav {
+            flex: 0 0 10vw;
+            background: beige;
+        }
+
+        #main > aside {
+            flex: 0 0 5vw;
+            background: beige;
+        }
+        #main > nav {
+            order: -1;
+        }
+
+        header {
+            background: yellowgreen;
+            height: 4vh;
+        }
+        footer {
+            background: yellowgreen;
+            height: 4vh;
+        }
+
+        header, footer, article, nav, aside {
+            padding: .3em;
+        }
+    </style>
+</head>
+<body class='default'>
+<!--    <h1>IPredict Train</h1>-->
+    <header>Header</header>
+    <div id="main">
+        <nav>Datasources
+            <div id='jqxTree'></div>
+            <script>
+                let dsTree = $('#jqxTree');
+                load_datasources("http://localhost:5000/ipredict/datasources", $, dsTree)
+            </script>
+        </nav>
+
+        <article>Article (middle)</article>
+
+        <aside>Aside (right)</aside>
+    </div>
+    <footer>Footer</footer>
+</body>
+</html>  

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IPredict</title>
+    <!-- common -->
+    <script type="text/javascript" src="js/scripts/jquery.js"></script>
+    <script type="text/javascript" src="js/scripts/jcanvas.js"></script>
+    <script type="text/javascript" src="js/scripts/underscore.js"></script>
+    <script type="text/javascript" src="js/scripts/backbone.js"></script>
+    <!-- jqwidgets -->
+    <link rel="stylesheet"        href="js/jqwidgets/styles/jqx.base.css" type="text/css"/>
+    <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxribbon.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxlayout.js"></script>
+
+    <script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxpanel.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxtree.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxexpander.js"></script>
+
+    <script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxdatatable.js"></script>
+
+    <script type="text/javascript" src="js/jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxdropdownlist.js"></script>
+    <!-- ipredict -->
+    <script type="text/javascript" src="app/app_layout.js"></script>
+    <!-- inline code -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#jqxLayout').jqxLayout({
+                resizable: true,
+                width: (window.innerWidth - border_width),
+                height: (window.innerHeight - border_height),
+                layout: layout
+            });
+            $(window).resize(() => {
+                $('#jqxLayout').jqxLayout({
+                    resizable: true,
+                    width: (window.innerWidth - border_width),
+                    height: (window.innerHeight - border_height),
+                    layout: layout
+                });
+            });
+
+            app.models.main = new app.Models.Main({url: window.location.href});
+        });
+    </script>
+
+    <style>
+        table, th, td {
+            border: 1px solid;
+        }
+        table {
+            border-collapse: collapse
+        }
+
+        #ds_data {
+            position: absolute;
+            bottom: 100px;
+            left: 0;
+        }
+    </style>
+</head>
+<body style="margin: 1px">
+    <div id="jqxLayout">
+        <!--right tabbedGroup-->
+        <div data-container="DataSourcesPanel">
+            <div id="datasources">Loading ...</div>
+        </div>
+        <div data-container="TimeSeriesModelsPanel">
+            <div id="tsmodels"></div>
+        </div>
+
+        <!--documentGroup-->
+        <div data-container="DataSourcePanel">
+            <div id="datasource">
+                <p>
+                    &nbsp<span id="ds_collection" style="font-size: 12px"></span>::<span id="ds_name" style="font-size: 20px"></span>
+                </p>
+                <p>
+                    <div id="ds_target"></div><!--Target: <span id="ds_target"></span>-->
+                </p>
+                <table id="ds_data">
+                    <tr><th>Col1</th><th>Col2</th></tr>
+                    <tr><td>Data1</td><td>Data2</td></tr>
+                </table>
+            </div>
+        </div>
+        <div data-container="TimeSeriesModelPanel">
+            <div id="tsmodel"></div>
+        </div>
+        <div data-container="IPredictPanel">
+            <div id="ipredict"></div>
+        </div>
+
+        <!--bottom tabbedGroup-->
+        <div data-container="ErrorListPanel">
+            <div id="errors"></div>
+        </div>
+        <div data-container="OutputPanel">
+            <div id="output"></div>
+        </div>
+
+        <!--autoHideGroup-->
+        <!--<div data-container="ToolboxPanel">
+            List of tools
+        </div>
+        <div data-container="HelpPanel">
+            Help topics
+        </div>-->
+
+    </div>
+    <canvas hidden id="canvas"></canvas>
+</body>
+</html>

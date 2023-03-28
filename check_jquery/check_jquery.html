@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+</head>
+<body>
+
+  <div id="1">One
+    <div id="11">Eleven</div>
+    <div id="12">Twelve</div>
+  </div>
+  <div id="2">Two
+    <div id="21">TwentyOne</div>
+    <div id="22">TwentyTwo</div>
+  </div>
+
+  <script>
+    // console.log($("#1").text());
+    var one = $("#1");
+    var eleven = $("#11");
+    eleven = one.find("#12");
+    // console.log(one.text());
+    console.log(eleven.text());
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title id='Description'>This demo illustrates the basic functionality of the Grid plugin. The jQWidgets Grid plugin offers rich support for interacting with data, including paging, grouping and sorting.
+  </title>
+  <meta name="description" content="JavaScript Grid with rich support for Data Filtering, Paging, Editing, Sorting and Grouping" />
+  <link rel="stylesheet" href="js/jqwidgets/styles/jqx.base.css" type="text/css" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1 minimum-scale=1" />
+
+  <script type="text/javascript" src="js/scripts/jquery.js"></script>
+  <script type="text/javascript" src="js/scripts/jcanvas.js"></script>
+  <script type="text/javascript" src="js/scripts/underscore.js"></script>
+  <script type="text/javascript" src="js/scripts/backbone.js"></script>
+
+  <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxmenu.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxcheckbox.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxlistbox.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxdropdownlist.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxgrid.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxgrid.sort.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxgrid.pager.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxgrid.selection.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxgrid.edit.js"></script>
+  <script type="text/javascript" src="js/jqwidgets/jqxgrid.filter.js"></script>
+  <script type="text/javascript" src="js/scripts/demos.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      var url = "https://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/../sampledata/products.xml";
+      url = "http://localhost:5000/ipredict/temp/products.xml"
+      // prepare the data
+      var source =
+              {
+                datatype: "xml",
+                datafields: [
+                  { name: 'ProductName', type: 'string' },
+                  { name: 'QuantityPerUnit', type: 'int' },
+                  { name: 'UnitPrice', type: 'float' },
+                  { name: 'UnitsInStock', type: 'float' },
+                  { name: 'Discontinued', type: 'bool' }
+                ],
+                root: "Products",
+                record: "Product",
+                id: 'ProductID',
+                url: url
+              };
+
+      let result = $.ajax({
+        async: true,
+        url: url,
+        success: function (data, status, xhr) {
+          console.log("ajax.fetch: success");
+          console.log(data);
+        },
+        error: function (request, status, error) {
+          console.log("ajax.fetch: error");
+          console.log(request);
+          console.log(status);
+          console.log(error);
+        }
+      });
+
+      var cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties, rowdata) {
+        if (value < 20) {
+          return '<span style="margin: 4px; margin-top:8px; float: ' + columnproperties.cellsalign + '; color: #ff0000;">' + value + '</span>';
+        }
+        else {
+          return '<span style="margin: 4px; margin-top:8px; float: ' + columnproperties.cellsalign + '; color: #008000;">' + value + '</span>';
+        }
+      }
+      var dataAdapter = new $.jqx.dataAdapter(source, {
+        downloadComplete: function (data, status, xhr) { },
+        loadComplete: function (data) { },
+        loadError: function (xhr, status, error) { }
+      });
+      // initialize jqxGrid
+      $("#grid").jqxGrid(
+              {
+                width: getWidth('Grid'),
+                source: dataAdapter,
+                pageable: true,
+                autoheight: true,
+                columnsresize: true,
+                // columnsresize: true,
+                sortable: false,
+                altrows: true,
+                enabletooltips: true,
+                editable: true,
+                filterable: true,
+                selectionmode: 'multiplecellsadvanced',
+                columns: [
+                  { text: 'Product Name', columngroup: 'ProductDetails', datafield: 'ProductName', width: 250 },
+                  { text: 'Quantity per Unit', columngroup: 'ProductDetails', datafield: 'QuantityPerUnit', cellsalign: 'right', align: 'right', width: 200 },
+                  { text: 'Unit Price', columngroup: 'ProductDetails', datafield: 'UnitPrice', align: 'right', cellsalign: 'right', cellsformat: 'c2', width: 200 },
+                  { text: 'Units In Stock', datafield: 'UnitsInStock', cellsalign: 'right', cellsrenderer: cellsrenderer, width: 100 },
+                  { text: 'Discontinued', columntype: 'checkbox', datafield: 'Discontinued' }
+                ],
+                columngroups: [
+                  { text: 'Product Details', align: 'center', name: 'ProductDetails' }
+                ]
+              });
+    });
+  </script>
+</head>
+<body class='default'>
+<div id="grid">
+</div>
+</body>
+</html>
