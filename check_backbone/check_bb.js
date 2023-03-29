@@ -1,16 +1,22 @@
 var jsdom = require("jsdom");
 
 const { JSDOM } = jsdom;
-const dom = new JSDOM(`<!DOCTYPE html><p id="el">Hello world from DOM</p>`);;
-const { window } = dom;
-const { document } = window;
+const dom = new JSDOM(`<!DOCTYPE html><p id="el">Hello world from DOM</p>`);
 
+// const { window } = dom;
+// const { document } = window;
+
+// window & document MUST BE local (let) & global (global.*)
+let window = dom.window;
+let document = dom.window.document;
 global.windows = window;
 global.document = document;
 
 $ = jQuery = require('jquery')(window);
+_ = require('underscore');
 Backbone = require("backbone");
 Backbone.$ = $;
+Backbone._ = _;
 
 console.log("Done!")
 // console.log(global);
@@ -31,15 +37,21 @@ let app = {};
 // let document = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
 
 app.Model = Backbone.Model.extend({
-   defaults: {
-       title: "Model Template",
-       message: "Hello Cruel World"
-   },
+    defaults: {
+        title: "Model Template",
+        message: "Hello Cruel World"
+    },
 
-   initialize: function() {
-       // console.log(`${this.get('message')}`)
-       // console.log(this);
-   }
+    constructor: function() {
+        this.prototype.constructor();
+        console.log("Model.constructor");
+    },
+
+    initialize: function() {
+        console.log("Model.initialize");
+        // console.log(`${this.get('message')}`)
+        // console.log(this);
+    }
 
 });
 
@@ -74,7 +86,6 @@ app.v1 = new app.View({
 app.v2 = new app.View({
     model: app.m2
 })
-
 
 app.m1.set('message', "Ma dai che forse funziona!");
 
