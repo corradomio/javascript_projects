@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="./js/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <script type="text/javascript" src="./js/scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="./js/jqwidgets/jqxsplitter.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // create splitter. 
+            $('#mainSplitter').jqxSplitter({ width: 600, height: 500, panels: [{ size: 150 }, { size: 150 }, { size: 150 }, { size: 150}] });
+            var splitArea = '';
+            var startOffset = 0;
+            // calculate and display current split panels widths.
+            var mouseMove = function (splitbar, event) {
+                var panelWidths = [];
+                panelWidths["panel1"] = $('#panel1').width();
+                panelWidths["panel2"] = $('#panel2').width();
+                panelWidths["panel3"] = $('#panel3').width();
+                panelWidths["panel4"] = $('#panel4').width();
+                var offset = parseInt(splitbar.offset().left) - startOffset;
+                panelWidths[splitArea.previous[0].id] = Math.abs(splitArea.previous.width() + offset);
+                panelWidths[splitArea.next[0].id] = Math.abs(splitArea.next.width() - offset);
+                // display widths.
+                $('#panel1').text(panelWidths["panel1"]);
+                $('#panel2').text(panelWidths["panel2"]);
+                $('#panel3').text(panelWidths["panel3"]);
+                $('#panel4').text(panelWidths["panel4"]);
+            }
+            // bind to the mouse move of captured splitter.
+            $('#mainSplitter').bind('resizeStart', function (event) {
+                var splitter = $('#mainSplitter').jqxSplitter('_capturedElement');
+                splitArea = $('#mainSplitter').jqxSplitter('_resizeArea');
+                startOffset = parseInt(splitter.offset().left);
+                splitter.bind('mousemove', function (event) {
+                    mouseMove(splitter, event);
+                });
+            });
+        });
+    </script>
+</head>
+<body class='default'>
+<div id='jqxWidget'>
+    <div id="container">
+        <div id="mainSplitter">
+            <div id="panel1">Column 1</div>
+            <div id="panel2">Column 2</div>
+            <!--div id="panel3">Column 3</div>
+            <div id="panel4">Column 4</div-->
+        </div>
+    </div>
+</div>
+</body>
+</html>

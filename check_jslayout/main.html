@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IPredict</title>
+    <!-- common -->
+    <script type="text/javascript" src="js/scripts/jquery.js"></script>
+    <script type="text/javascript" src="js/scripts/underscore.js"></script>
+    <script type="text/javascript" src="js/scripts/backbone.js"></script>
+
+    <!-- chart -->
+    <script type="text/javascript" src="js/chart/chart.umd.js"></script>
+
+    <!-- jqwidgets -->
+    <link rel="stylesheet"        href="js/jqwidgets/styles/jqx.base.css" type="text/css"/>
+    <script type="text/javascript" src="js/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxribbon.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxlayout.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxpanel.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxtree.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxexpander.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxdatatable.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxgrid.grouping.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxgrid.sort.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxgrid.pager.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxgrid.edit.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxgrid.filter.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxgrid.columnsresize.js"></script>
+    <script type="text/javascript" src="js/jqwidgets/jqxgrid.columnsreorder.js"></script>
+
+    <!-- ipredict/utilities -->
+    <script type="text/javascript" src="app/utils_backbone.js"></script>
+    <script type="text/javascript" src="app/utils_ipredict.js"></script>
+    <script type="text/javascript" src="app/utils_jqx.js"></script>
+    <script type="text/javascript" src="app/utils_chart.js"></script>
+    <!-- ipredict/application -->
+    <script type="text/javascript" src="app/app_first.js"></script>
+    <script type="text/javascript" src="app/app_layout.js"></script>
+    <script type="text/javascript" src="app/app_models.js"></script>
+    <script type="text/javascript" src="app/app_views.js"></script>
+    <script type="text/javascript" src="app/app_main.js"></script>
+    <!-- inline code -->
+    <script type="text/javascript">
+        // hljs.highlightAll();
+        $(document).ready(function () {
+
+            $("#jqxLayout").jqxLayout({
+                resizable: true,
+                width: (window.innerWidth - border_width),
+                height: (window.innerHeight - border_height),
+                layout: layout
+            });
+            $(window).resize(() => {
+                $("#jqxLayout").jqxLayout({
+                    resizable: true,
+                    width: (window.innerWidth - border_width),
+                    height: (window.innerHeight - border_height),
+                    layout: layout
+                });
+            });
+
+            app.models.main = new app.Models.Main({url: window.location.href});
+        });
+    </script>
+    <style>
+        select {
+            width: 150px;
+        }
+    </style>
+</head>
+<body style="margin: 1px">
+    <div id="jqxLayout">
+        <div data-container="TrainConfigPanel" id="train_config_panel">
+            <h2>Train Model</h2>
+            <table>
+                <tr>
+                    <td>Select:</td>
+                    <td>
+                        <div id="train_list" style="width: 150px"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name:</td>
+                    <td>
+                        <input type="text" id="train_name" spellcheck="false" style="width: 190px">
+                        &nbsp;id:<span id="train_id"></span>
+                        &nbsp;status:<span id="train_status"></span>
+                        &nbsp;&nbsp;<!--span id="train_message"></span -->
+                        <textarea rows="1" cols="80" id="train_message" spellcheck="false" readonly="true" wrap="off"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description:</td>
+                    <td>
+                        <textarea rows="1" cols="132" id="train_description" spellcheck="false"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Configuration:</td>
+                    <td>
+                        <textarea rows="22" cols="132" id="train_config" spellcheck="false"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Actions:</td>
+                    <td>
+                        <button id="train_new"  title="Create a new model (cloning the current one)">new</button>
+                        <button id="train_save" title="Save the model">save</button>
+                        <button id="train_run"  title="Start the process in background">train</button>
+                        &nbsp;
+                        <button id="train_clear"  title="Delete all data but NOT the model">clear</button>
+                        <button id="train_delete" title="Delete all data AND the model">delete</button>
+                        &nbsp;
+                        <button id="train_abort"   title="Abort the background process">abort</button>
+                        <button id="train_refresh" title="Refresh the model information">refresh</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div data-container="PredictConfigPanel" id="predict_config_panel">
+            <h2>Predict Model</h2>
+            <table>
+                <tr>
+                    <td>Select:</td>
+                    <td>
+                        <div id="predict_list" style="width: 150px"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name:</td>
+                    <td>
+                        <input type="text" id="predict_name" spellcheck="false" style="width: 190px">
+                        &nbsp;id:<span id="predict_id"></span>
+                        &nbsp;status:<span id="predict_status"></span>
+                        &nbsp;&nbsp;<!--span id="predict_message"></span -->
+                        <textarea rows="1" cols="80" id="predict_message" spellcheck="false" readonly="true" wrap="off"></textarea>
+                    </td>
+                </tr>
+                <!--tr>
+                    <td>Trained:</td>
+                    <td>
+                        <select id="predict_trained"></select>
+                    </td>
+                </tr -->
+                <tr>
+                    <td>Description:</td><td><textarea rows="1" cols="132" id="predict_description" spellcheck="false"></textarea></td>
+                </tr>
+                <tr>
+                    <td>Configuration:</td>
+                    <td>
+                        <textarea rows="22" cols="132" id="predict_config" spellcheck="false"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Actions:</td>
+                    <td>
+                        <button id="predict_new"  title="Create a new model (cloning the current one)">new</button>
+                        <button id="predict_save" title="Save the model">save</button>
+                        <button id="predict_run"  title="Start the process in background">predict</button>
+                        &nbsp;
+                        <button id="predict_clear"  title="Delete all data but NOT the model">clear</button>
+                        <button id="predict_delete" title="Delete all data AND the model">delete</button>
+                        &nbsp;
+                        <button id="predict_abort"   title="Abort the background process">abort</button>
+                        <button id="predict_refresh" title="Refresh the model information">refresh</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div data-container="ModelsScoresPanel" id="models_score_panel">
+            <h2>Models Scores</h2>
+            <table>
+                <tr>
+                    <td>Select:</td>
+                    <td>
+                        <div id="scores_list" style="width: 150px"></div>
+                    </td>
+                    <td>
+                        &nbsp;id:<span id="scores_id"></span>
+                        &nbsp;scores:<span id="scores_count"></span>
+                    </td>
+                </tr>
+            </table>
+            <div id="models_scores"></div>
+        </div>
+        <div data-container="TrainPlotPanel" id="train_plot_panel">
+            <h2>Train Plot</h2>
+            <table>
+                <tr>
+                    <td>Select</td>
+                    <td>
+                        <div id="plot_train_list" style="width: 200px"></div>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <div id="plot_train_data_list" style="width: 250px"></div>
+                    </td>
+                    <td>
+                        &nbsp;id:<span id="plot_train_id"></span>
+                        &nbsp;status:<span id="plot_train_status"></span>
+                        &nbsp;plots:<span id="plot_train_list_length"></span>
+                        &nbsp;points:<span id="plot_train_data_length"></span>
+                        &nbsp;best:<input type="checkbox" id="plot_train_best">
+                    </td>
+                </tr>
+            </table>
+            <div id="plot_train_data" style="height: 80%; width: 100%">
+                <div class="chart-container" style="position: relative; height:70vh; width:150vw">
+                    <canvas id="canvas_train_data"></canvas>
+                </div>
+            </div>
+        </div>
+        <div data-container="PredictPlotPanel" id="predict_plot_panel">
+            <h2>Predict Plot</h2>
+                <table>
+                <tr>
+                    <td>Select</td>
+                    <td>
+                        <div id="plot_predict_list" style="width: 200px"></div>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <div id="plot_predict_data_list" style="width: 250px"></div>
+                    </td>
+                    <td>
+                        &nbsp;id:<span id="plot_predict_id"></span>
+                        &nbsp;status:<span id="plot_predict_status"></span>
+                        &nbsp;plots:<span id="plot_predict_list_length"></span>
+                        &nbsp;points:<span id="plot_predict_data_length"></span>
+                        &nbsp;best:<input type="checkbox" id="plot_predict_best">
+                    </td>
+                </tr>
+            </table>
+            <div id="plot_predict_data" style="height: 80%; width: 100%">
+                <div class="chart-container" style="position: relative; height:70vh; width:150vw">
+                    <canvas id="canvas_predict_data"></canvas>
+                </div>
+            </div>
+        </div>
+        <div data-container="UploadFilePanel" id="upload_file_panel">
+            <h2>Upload File</h2>
+            <!--
+                  method="post"
+                  action="/ipredict/upload"
+              -->
+            <form id="upload_form"
+                  enctype="multipart/form-data">
+                <table>
+                    <tr>
+                        <td>
+                            <label for="upload_folder">Folder</label>
+                        </td>
+                        <td>
+                            <input id="upload_folder" name="upload_folder"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="upload_file">File</label>
+                        </td>
+                        <td>
+                            <input id="upload_file" name="upload_file" type="file" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+
+                        </td>
+                        <td>
+                            <button id="upload" title="Upload a file">&nbsp;Upload&nbsp;&nbsp;</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <h2>Files uploaded</h2>
+            <table>
+                <tr>
+                <td>Files:&nbsp;</td>
+                <td>
+                    <div id="uploaded_files"></div>
+                </td>
+                </tr>
+                <tr>
+                    <td>Actions:</td>
+                    <td>
+                        <button id="files_download"  title="Download all selected files">download</button>
+                        <button id="files_delete"  title="Delete all selected files">delete</button>
+                        <button id="files_refresh"  title="Refresh the list of uploaded files">refresh</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div data-container="HelpPanel" id="help_panel">
+            <h2>Help</h2>
+        </div>
+        <div data-container="OutputPanel" id="output_panel">
+            <ul id="log_list">
+                <li>log</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
