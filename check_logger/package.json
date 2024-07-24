@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "log4js": "^6.9.1",
+    "log4js-json-layout": "^2.2.3",
+    "pino": "^9.3.1",
+    "winston": "^3.13.1"
+  }
+}
